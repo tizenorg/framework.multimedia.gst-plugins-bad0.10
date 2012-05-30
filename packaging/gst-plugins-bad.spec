@@ -5,6 +5,7 @@ Release:    2
 Group:      TO_BE/FILLED_IN
 License:    LGPLv2+
 Source0:    %{name}-%{version}.tar.gz
+Source1001: packaging/gst-plugins-bad.manifest 
 Patch0:     gst-plugins-bad-disable-gtk-doc.patch
 BuildRequires:  gettext-tools
 BuildRequires:  gst-plugins-base-devel  
@@ -34,6 +35,7 @@ real live maintainer, or some actual wide use.
 
 
 %build
+cp %{SOURCE1001} .
 ./autogen.sh 
 %configure  --disable-static \
 	--disable-nls \
@@ -162,6 +164,7 @@ rm -rf %{buildroot}
 
 
 %files
+%manifest gst-plugins-bad.manifest
 %defattr(-,root,root,-)
 %{_libdir}/gstreamer-0.10/libgstautoconvert.so
 %{_libdir}/gstreamer-0.10/libgstvideofiltersbad.so
