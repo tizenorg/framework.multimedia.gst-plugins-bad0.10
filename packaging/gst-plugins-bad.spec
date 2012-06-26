@@ -27,6 +27,13 @@ something - be it a good code review, some documentation, a set of tests, a
 real live maintainer, or some actual wide use.
 
 
+%package devel
+Summary:    Development tools for GStreamer bad plugins
+Group:      Development/Libraries
+Requires:   %{name} = %{version}-%{release}
+
+%description devel
+Separate sub-package for development based on gstreamer bad plugins. 
 
 
 %prep
@@ -197,12 +204,15 @@ rm -rf %{buildroot}
 %{_libdir}/libgstphotography-0.10.so
 %{_libdir}/libgstsignalprocessor-0.10.so
 %{_libdir}/libgstbasevideo-0.10.so.0
-%exclude %{_includedir}/gstreamer-0.10/gst/interfaces/photography-enumtypes.h
-%exclude %{_includedir}/gstreamer-0.10/gst/interfaces/photography.h
-%exclude %{_includedir}/gstreamer-0.10/gst/signalprocessor/gstsignalprocessor.h
-%exclude %{_includedir}/gstreamer-0.10/gst/video/gstbasevideocodec.h
-%exclude %{_includedir}/gstreamer-0.10/gst/video/gstbasevideodecoder.h
-%exclude %{_includedir}/gstreamer-0.10/gst/video/gstbasevideoencoder.h
-%exclude %{_libdir}/pkgconfig/gstreamer-plugins-bad-0.10.pc
 
+%files devel
+%manifest gst-plugins-bad.manifest
+%defattr(-,root,root,-)
+%{_includedir}/gstreamer-0.10/gst/interfaces/photography-enumtypes.h
+%{_includedir}/gstreamer-0.10/gst/interfaces/photography.h
+%{_includedir}/gstreamer-0.10/gst/signalprocessor/gstsignalprocessor.h
+%{_includedir}/gstreamer-0.10/gst/video/gstbasevideocodec.h
+%{_includedir}/gstreamer-0.10/gst/video/gstbasevideodecoder.h
+%{_includedir}/gstreamer-0.10/gst/video/gstbasevideoencoder.h
+%{_libdir}/pkgconfig/gstreamer-plugins-bad-0.10.pc
 

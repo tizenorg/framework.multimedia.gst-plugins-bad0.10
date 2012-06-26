@@ -1,0 +1,29 @@
+* Tue Jun 26 2012 Yan Yin <yan.yin@intel.com> 2964d49
+- seperate devel subpackage in spec file
+
+* Wed May 30 2012 Ryan Ware <ryan.r.ware@intel.com> 0b6e3bf
+- Add default Smack manifest for gst-plugins-bad.spec
+
+* Sun Apr 29 2012 Kim Kibum <kb0929.kim@samsung.com> 4bd2258
+- upload tizen1.0 source
+
+* Wed Mar 14 2012 Yan Yin <yan.yin@intel.com> febe7e6
+- update for beta universally
+
+* Fri Feb 17 2012 Kibum Kim <kb0929.kim@samsung.com> ce7da72
+- fix build break
+[ Hyunseok Lee ]
+- Disable faac
+
+* Thu Feb 09 2012 Jeongmo Yang <jm80.yang@samsung.com> 8ea1d24
+- Update changelog
+- Clear changelog
+
+* Wed Feb 08 2012 Jeongmo Yang <jm80.yang@samsung.com> 2700452
+- Enable faac encoder
+
+* Fri Jan 06 2012 Kibum Kim <kb0929.kim@samsung.com> d7d277c
+- Git init
+[ Eunkyoung Kim ]
+- Initial empty repository
+
