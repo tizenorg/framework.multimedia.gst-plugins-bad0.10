@@ -259,11 +259,6 @@ AC_SUBST(EXIF_LIBS)
 AC_SUBST(EXIF_CFLAGS)
 AM_CONDITIONAL(USE_EXIF, test "x$HAVE_EXIF" = "xyes")
 
-dnl crypto for hlsdemux
-PKG_CHECK_MODULES(CRYPTO, libcrypto)
-AC_SUBST(CRYPTO_CFLAGS)
-AC_SUBST(CRYPTO_LIBS)
-
 dnl Orc
 ORC_CHECK([0.4.11])
 
@@ -708,6 +703,13 @@ AG_GST_CHECK_FEATURE(CDAUDIO, [cdaudio], cdaudio, [
   AC_SUBST(CDAUDIO_CFLAGS)
   AC_SUBST(CDAUDIO_LIBS)
 ])
+
+dnl crypto for hlsdemux
+if test "x$USE_PLUGINS_HLS" = "xyes"; then
+  PKG_CHECK_MODULES(CRYPTO, libcrypto)
+  AC_SUBST(CRYPTO_CFLAGS)
+  AC_SUBST(CRYPTO_LIBS)
+fi
 
 dnl *** celt ***
 translit(dnm, m, l) AM_CONDITIONAL(USE_CELT, true)

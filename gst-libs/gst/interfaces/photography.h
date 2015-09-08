@@ -71,6 +71,7 @@ G_BEGIN_DECLS
 #define GST_PHOTOGRAPHY_PROP_FLICKER_MODE "flicker-mode"
 #define GST_PHOTOGRAPHY_PROP_FOCUS_MODE   "focus-mode"
 #define GST_PHOTOGRAPHY_PROP_ZOOM   "zoom"
+#define GST_PHOTOGRAPHY_PROP_AUTOFOCUS    "autofocus"
 
 /**
  * GstPhotography:
@@ -204,7 +205,14 @@ typedef enum {
     GST_PHOTOGRAPHY_FOCUS_MODE_EXTENDED,
     GST_PHOTOGRAPHY_FOCUS_MODE_CONTINUOUS_NORMAL,
     GST_PHOTOGRAPHY_FOCUS_MODE_CONTINUOUS_EXTENDED,
+    GST_PHOTOGRAPHY_FOCUS_MODE_SPORT
 } GstFocusMode;
+
+typedef enum {
+    GST_PHOTOGRAPHY_OPERATION_MODE_VIEWFINDER = 0,
+    GST_PHOTOGRAPHY_OPERATION_MODE_IMAGE_CAPTURE,
+    GST_PHOTOGRAPHY_OPERATION_MODE_PREVIEW,
+} GstOperationMode;
 
 typedef struct
 {
@@ -263,6 +271,8 @@ typedef void (*GstPhotoCapturePrepared) (gpointer data,
  * @set_config: vmethod to set all configuration parameters at once
  * @get_config: vmethod to get all configuration parameters at once
  * @get_image_capture_supported_caps: vmethod to get caps describing supported image capture formats
+ * @set_format: vmethod to set caps for given operation mode
+ * @get_format: vmethod to get current caps for given operation mode
  *
  * #GstPhotographyInterface interface.
  */
@@ -313,11 +323,13 @@ typedef struct _GstPhotographyInterface
   void (*set_autofocus) (GstPhotography * photo, gboolean on);
   gboolean (*set_config) (GstPhotography * photo, GstPhotoSettings * config);
   gboolean (*get_config) (GstPhotography * photo, GstPhotoSettings * config);
-
   gboolean (*get_noise_reduction) (GstPhotography * photo,
     GstPhotographyNoiseReduction * noise_reduction);
   gboolean (*set_noise_reduction) (GstPhotography * photo,
     GstPhotographyNoiseReduction noise_reduction);
+  gboolean (*set_format) (GstPhotography * photo,
+      GstOperationMode op_mode, GstCaps * op_mode_caps);
+  GstCaps * (*get_format) (GstPhotography * photo, GstOperationMode op_mode);
 
   /*< private > */
   gpointer _gst_reserved[GST_PADDING];
@@ -383,6 +395,11 @@ gboolean gst_photography_set_config (GstPhotography * photo,
     GstPhotoSettings * config);
 gboolean gst_photography_get_config (GstPhotography * photo,
     GstPhotoSettings * config);
+
+gboolean gst_photography_set_format (GstPhotography * photo,
+    GstOperationMode op_mode, GstCaps * op_mode_caps);
+GstCaps * gst_photography_get_format (GstPhotography * photo,
+    GstOperationMode op_mode);
 
 G_END_DECLS
 

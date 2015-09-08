@@ -457,6 +457,9 @@ gst_h264_parse_process_nal (GstH264Parse * h264parse, GstH264NalUnit * nalu)
     GST_DEBUG_OBJECT (h264parse, "not processing nal size %u", nalu->size);
     return;
   }
+  memset(&pps,0,sizeof(GstH264PPS));
+  memset(&sps,0,sizeof(GstH264SPS));
+
 
   /* we have a peek as well */
   nal_type = nalu->type;

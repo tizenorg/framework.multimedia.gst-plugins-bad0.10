@@ -2,17 +2,22 @@
 Name:       gst-plugins-bad
 Summary:    GStreamer plugins from the "bad" set
 Version:    0.10.23
-Release:    9
+Release:    12
 Group:      Applications/Multimedia
-License:    LGPLv2+
+License:    LGPL-2.0+
 Source0:    %{name}-%{version}.tar.gz
 Patch0:     gst-plugins-bad-disable-gtk-doc.patch
 BuildRequires:  gettext
 BuildRequires:  gst-plugins-base-devel  
 BuildRequires:  pkgconfig(gstreamer-0.10) 
 BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(liboil-0.3)
+%if "%{?tizen_profile_name}" == "mobile"
 BuildRequires:  pkgconfig(libcrypto)
+%endif
+%if "%{?tizen_profile_name}" == "tv"
+BuildRequires:  pkgconfig(libcrypto)
+%endif
+
 
 %description
 GStreamer is a streaming media framework, based on graphs of filters
@@ -28,6 +33,13 @@ something - be it a good code review, some documentation, a set of tests, a
 real live maintainer, or some actual wide use.
 
 
+%package devel
+Summary:    Development tools for GStreamer bad plugins
+Group:      Development/Libraries
+Requires:   %{name} = %{version}-%{release}
+
+%description devel
+Development files for the GStreamer media framework badplug-ins
 
 
 %prep
@@ -48,7 +60,6 @@ export CFLAGS+=" -Wall -g -fPIC\
  --disable-nls\
  --with-html-dir=/tmp/dump\
  --disable-examples\
- --disable-adpcmdec\
  --disable-aiff\
  --disable-amrparse\
  --disable-asfmux\
@@ -138,7 +149,6 @@ export CFLAGS+=" -Wall -g -fPIC\
  --disable-schro\
  --disable-vp8\
  --disable-zbar\
- --disable-dataurisrc\
  --disable-shm\
  --disable-coloreffects\
  --disable-colorspace\
@@ -147,7 +157,6 @@ export CFLAGS+=" -Wall -g -fPIC\
  --disable-interlace\
  --disable-gaudieffects\
  --disable-y4m\
- --disable-adpcmdec\
  --disable-adpcmenc\
  --disable-segmentclip\
  --disable-geometrictransform\
@@ -166,6 +175,49 @@ export CFLAGS+=" -Wall -g -fPIC\
  --disable-smooth\
  --disable-avc\
  --disable-d3dvideosink\
+%if "%{?tizen_profile_name}" == "wearable"
+ --disable-fieldanalysis\
+ --disable-h264parse\
+ --disable-hls\
+ --disable-id3tag\
+ --disable-ivfparse\
+ --disable-jpegformat\
+ --disable-legacyresample\
+ --disable-liveadder\
+ --disable-mpegdemux\
+ --disable-mpegtsmux\
+ --disable-mpegvideoparse\
+ --disable-patchdetect\
+ --disable-rawparse\
+ --disable-rtpmux\
+ --disable-rtpvp8\
+ --disable-sdi\
+ --disable-sdp\
+ --disable-videofilters\
+ --disable-videoparsers\
+ --disable-direct3d\
+ --disable-apple_media\
+ --disable-quicktime\
+ --disable-voamrwbenc\
+ --disable-voaacenc\
+ --disable-curl\
+ --disable-decklink\
+ --disable-resindvd\
+ --disable-flite\
+ --disable-linsys\
+ --disable-opencv\
+ --disable-pvr\
+ --disable-rsvg\
+ --disable-rtmp\
+ --disable-spandsp\
+ --disable-autoconvert\
+ --disable-camerabin\
+ --disable-camerabin2\
+ --disable-dataurisrc\
+ --disable-debugutils\
+ --disable-dtmf\
+ --disable-adpcmdec\
+%endif
  --disable-pvr2d
 
 
@@ -173,62 +225,35 @@ make %{?jobs:-j%jobs}
 
 %install
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/license
+cp %{_builddir}/%{name}-%{version}/COPYING.LIB %{buildroot}/usr/share/license/%{name}
 %make_install
 
 
 
 
 %files
+%manifest gst-plugins-bad.manifest
 %defattr(-,root,root,-)
-%{_libdir}/gstreamer-0.10/libgstautoconvert.so
-%{_libdir}/gstreamer-0.10/libgstvideofiltersbad.so
-%{_libdir}/gstreamer-0.10/libgstrtpvp8.so
-%{_libdir}/gstreamer-0.10/libgstdtmf.so
-%{_libdir}/gstreamer-0.10/libgstfieldanalysis.so
-%{_libdir}/gstreamer-0.10/libgstmpegtsdemux.so
-%{_libdir}/gstreamer-0.10/libgstmpegtsmux.so
-%{_libdir}/gstreamer-0.10/libgstfragmented.so
-%{_libdir}/gstreamer-0.10/libgstvideoparsersbad.so
-%{_libdir}/gstreamer-0.10/libgstrtpmux.so
-%{_libdir}/gstreamer-0.10/libgstliveadder.so
-%{_libdir}/gstreamer-0.10/libgstpatchdetect.so
-%{_libdir}/gstreamer-0.10/libgstmpegdemux.so
-%{_libdir}/gstreamer-0.10/libgstlegacyresample.so
-%exclude %{_libdir}/gstreamer-0.10/libgstcamerabin.so
-%exclude %{_libdir}/gstreamer-0.10/libgstcamerabin2.so
-%{_libdir}/gstreamer-0.10/libgsth264parse.so
-%{_libdir}/gstreamer-0.10/libgstjpegformat.so
-%{_libdir}/gstreamer-0.10/libgstmpegvideoparse.so
-%{_libdir}/gstreamer-0.10/libgstlinsys.so
-%{_libdir}/gstreamer-0.10/libgstsdi.so
-%{_libdir}/gstreamer-0.10/libgstdecklink.so
-%{_libdir}/gstreamer-0.10/libgstid3tag.so
-%{_libdir}/gstreamer-0.10/libgstsdpelem.so
-%{_libdir}/gstreamer-0.10/libgstrawparse.so
-%{_libdir}/gstreamer-0.10/libgstdebugutilsbad.so
-%{_libdir}/libgstbasevideo-0.10.so*
-%exclude %{_libdir}/libgstphotography-0.10.so*
-%exclude %{_libdir}/libgstsignalprocessor-0.10.so*
-%{_libdir}/libgstcodecparsers-0.10.so*
-%exclude %{_libdir}/libgstbasecamerabinsrc-0.10.so*
-%exclude %{_includedir}/gstreamer-0.10/gst/basecamerabinsrc/gstbasecamerasrc.h
-%exclude %{_includedir}/gstreamer-0.10/gst/basecamerabinsrc/gstcamerabin-enum.h
-%exclude %{_includedir}/gstreamer-0.10/gst/basecamerabinsrc/gstcamerabinpreview.h
-%exclude %{_includedir}/gstreamer-0.10/gst/codecparsers/gsth264parser.h
-%exclude %{_includedir}/gstreamer-0.10/gst/codecparsers/gstmpeg4parser.h
-%exclude %{_includedir}/gstreamer-0.10/gst/codecparsers/gstmpegvideoparser.h
-%exclude %{_includedir}/gstreamer-0.10/gst/codecparsers/gstvc1parser.h
-%exclude %{_includedir}/gstreamer-0.10/gst/interfaces/photography-enumtypes.h
-%exclude %{_includedir}/gstreamer-0.10/gst/interfaces/photography.h
-%exclude %{_includedir}/gstreamer-0.10/gst/signalprocessor/gstsignalprocessor.h
-%exclude %{_includedir}/gstreamer-0.10/gst/video/gstbasevideocodec.h
-%exclude %{_includedir}/gstreamer-0.10/gst/video/gstbasevideodecoder.h
-%exclude %{_includedir}/gstreamer-0.10/gst/video/gstbasevideoencoder.h
-%exclude %{_includedir}/gstreamer-0.10/gst/video/gstbasevideoutils.h
-%exclude %{_includedir}/gstreamer-0.10/gst/video/gstsurfacebuffer.h
-%exclude %{_includedir}/gstreamer-0.10/gst/video/gstsurfaceconverter.h
-%exclude %{_includedir}/gstreamer-0.10/gst/video/videocontext.h
-%exclude %{_libdir}/pkgconfig/gstreamer-plugins-bad-0.10.pc
-%exclude %{_libdir}/pkgconfig/gstreamer-basevideo-0.10.pc
-%exclude %{_libdir}/pkgconfig/gstreamer-codecparsers-0.10.pc
+%if "%{?tizen_profile_name}" == "wearable"
+%exclude %{_libdir}/libgstbasevideo-0.10.so.*
+%exclude %{_libdir}/libgstcodecparsers-0.10.so.*
+%exclude %{_libdir}/libgstbasecamerabinsrc-0.10.so.*
+%exclude %{_libdir}/libgstphotography-0.10.so.*
+%exclude %{_libdir}/libgstsignalprocessor-0.10.so.*
+%else
+%{_libdir}/gstreamer-0.10/libgstdataurisrc.so
+%{_libdir}/libgstbasevideo-0.10.so.*
+%{_libdir}/libgstcodecparsers-0.10.so.*
+%{_libdir}/libgstbasecamerabinsrc-0.10.so.*
+%{_libdir}/libgstphotography-0.10.so.*
+%{_libdir}/libgstsignalprocessor-0.10.so.*
+%endif
+%{_libdir}/gstreamer-0.10/libgst*.so
+/usr/share/license/%{name}
 
+%files devel
+%defattr(-,root,root,-)
+%{_libdir}/libgst*.so
+%{_includedir}/gstreamer-0.10/gst/*
+%{_libdir}/pkgconfig/gstreamer-*.pc
